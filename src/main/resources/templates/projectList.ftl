@@ -52,8 +52,7 @@
         <#else>
             <td></td>
         </#if>
-
-        <#if project.videoSurveillanceInfo??  &&  project.videoSurveillanceInfo == "1" >
+        <#if project.videoSurveillance??  &&  project.videoSurveillance == "1" >
             <td>是</td>
         <#else>
             <td>否</td>
