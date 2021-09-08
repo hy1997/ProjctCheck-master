@@ -1,18 +1,22 @@
 package com.jy.project.service;
 
 
+import com.alibaba.excel.EasyExcel;
 import com.jy.project.mapper.ProjectCheckMapper;
 import com.jy.project.mapper.ProjectInfoMapper;
+import com.jy.project.model.ProjectInfoModel;
 import com.jy.project.po.ProjectInfoPO;
 import com.jy.project.po.ProjectPO;
 import com.jy.project.utils.JsonUtil;
 import com.jy.project.utils.UrlUtils;
 import com.jy.project.vo.ProjectInfoVO;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -149,5 +153,31 @@ public class ProjectCheckService {
             }
         }
         return  false;
+    }
+
+
+    public void excel() {
+        //欲导出excel的数据结果集
+        List<ProjectInfoModel> excel = new ArrayList<>();
+        //省略 向结果集里插入数据的操作
+        List<ProjectInfoVO> list = projectInfoMapper.list(new ProjectInfoPO());
+        BeanUtils.copyProperties(list,excel);
+        //UUID生成唯一name
+        String name = UUID.randomUUID().toString().replaceAll("-", "") + ".xlsx";
+        //实现excel写的操作
+        //1 设置写入文件夹地址和excel文件名称
+        String filename = "/路径" + name;
+        try {
+            // 2 调用easyexcel里面的方法实现写操作
+            // write方法两个参数：第一个参数文件路径名称，第二个参数实体类class
+            EasyExcel.write(filename, ProjectInfoModel.class).sheet("名字").doWrite(excel);
+//            //上传到fastdfs上 不上传的话只有本机可以找到，在上面路径下生成excel
+//            File file = new File(filename);
+//            String path = fastDFSClient.upload(new FileInputStream(file), name, null);
+//            path = (this.fastdfsDomain + path);
+//            json.put("url", path);
+        } finally {
+            new File(filename).delete();
+        }
     }
 }
