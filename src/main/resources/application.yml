@@ -13,7 +13,12 @@ spring:
 #??sql
 mybatis-plus:
   configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#     打印日志
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#    不打印日志
+    log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl
+
+
 
 environment:
   url: http://iot.whszjt.cn/allCurl
