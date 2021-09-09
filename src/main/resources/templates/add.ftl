@@ -22,6 +22,15 @@
         </div>
     </div>
 
+    <div class="form-group">
+        <label class="control-label col-md-3" for="categoryname">该项目接口是否需要检查：</label>
+        <div class="col-md-9">
+            <select class="form-control" name="isCheck">
+                <option value="是">是</option>
+                <option value="否">否</option>
+            </select>
+        </div>
+    </div>
 
     <div class="form-group">
         <label class="control-label col-md-3" for="categoryname">视频监控接口检测：</label>

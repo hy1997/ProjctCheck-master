@@ -17,6 +17,9 @@ public class ProjectPO {
     @TableField(value = "project_code")
     private String projectCode;
 
+    @TableField(value = "is_check")
+    private String isCheck;
+
     @TableField(value = "project_name")
     private String projectName;
 

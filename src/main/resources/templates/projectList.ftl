@@ -18,6 +18,7 @@
         <th>Id</th>
         <th>项目CODE</th>
         <th>项目名称</th>
+        <th>是否需要检查</th>
         <th>视频监控接口检测</th>
         <th>实名制接口检测</th>
         <th>环境接口检测</th>
@@ -49,6 +50,11 @@
 
         <#if project.projectName??>
             <td>${project.projectName}</td>
+        <#else>
+            <td></td>
+        </#if>
+        <#if project.isCheck??>
+            <td>${project.isCheck}</td>
         <#else>
             <td></td>
         </#if>
