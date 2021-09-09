@@ -24,18 +24,19 @@
     </resultMap>
 
     <select id="list" resultMap="ProjectInfoVOResultMap">
-        SELECT
-        info.*,
-        pro.project_name ,
-        pro.project_code
-        FROM
-        project pro
-        LEFT JOIN projectinfo info ON pro.id = info.project_id
-        <where>
-            info.id is not null
-            <if test ='null != projectName and projectName!=""'>AND  pro.project_name = #{docId}</if>
-            <if test ='null != createtime and createtime!=""'>AND DATE_FORMAT(info.createtime, '%Y-%m-%d') <![CDATA[>=]]> ATE_FORMAT(#{start}, '%Y-%m-%d')</if>
-            <if test ='null != createtime and createtime!=""'>    AND ATE_FORMAT(info.createtime, '%Y-%m-%d')  <![CDATA[<=]]> ATE_FORMAT(#{end}  , '%Y-%m-%d')</if>
+            SELECT
+            info.*,
+            pro.project_name ,
+            pro.project_code
+            FROM
+            project pro
+            LEFT JOIN projectinfo info ON pro.id = info.project_id
+            <where>
+                info.id is not null
+                AND DATE_FORMAT(info.createtime, '%Y-%m-%d')  <![CDATA[=]]>  curdate()
+                <if test ='null != projectName and projectName!=""'>AND  pro.project_name = #{docId}</if>
+            <if test ='null != createtime and createtime!=""'>AND DATE_FORMAT(info.createtime, '%Y-%m-%d') <![CDATA[>=]]> DATE_FORMAT(#{start}, '%Y-%m-%d')</if>
+            <if test ='null != createtime and createtime!=""'>    AND DATE_FORMAT(info.createtime, '%Y-%m-%d')  <![CDATA[<=]]> DATE_FORMAT(#{end}  , '%Y-%m-%d')</if>
             <if test ='null != projectCode and projectCode!=""'>AND  pro.project_code = #{pushStatus}</if>
         </where>
     </select>

@@ -92,26 +92,38 @@ public class ProjectCheckService {
                 }
                 if ("1".equals(projectPO.getRealNameSurveillance())) {
                     boolean realanameflg = true;
-                    Map<String, Object> stringObjectMap = JsonUtil.jsonToMap(UrlUtils.sendPost(environmentUrl, String.format(personGoInTodayList, LocalDate.now(), projectPO.getProjectCode())));
+                    Map<String, Object> stringObjectMap = JsonUtil.jsonToMap(UrlUtils.sendPost(environmentUrl, String.format(todayAttendance, LocalDate.now(), projectPO.getProjectCode())));
                     if (Integer.parseInt(stringObjectMap.get("code").toString()) != 200 && checkObject(stringObjectMap.get("data"))) {
                         realanameflg = false;
+                    }else{
+                        List<LinkedHashMap<String, Object>>  datas = (List<LinkedHashMap<String, Object>>) stringObjectMap.get("data");
+                        for (LinkedHashMap<String, Object> data : datas) {
+                            if("全部".equals(data.get("corpType"))){
+                                Integer onJobNum = Integer.parseInt(data.get("onJobNum").toString());
+                                Integer attendanceNum = Integer.parseInt(data.get("attendanceNum").toString());
+                                Integer presentNum = Integer.parseInt(data.get("presentNum").toString());
+                                if(onJobNum==0 || attendanceNum==0 || presentNum==0){
+                                    realanameflg=false;
+                                }
+                            }
+                        }
                     }
-                    Map<String, Object> stringObjectMap1 = JsonUtil.jsonToMap(UrlUtils.sendPost(environmentUrl, String.format(todayTeamAttendance, projectPO.getProjectCode())));
-                    if (Integer.parseInt(stringObjectMap1.get("code").toString()) != 200 && checkObject(stringObjectMap1.get("data"))) {
-                        realanameflg = false;
-                    }
-                    Map<String, Object> stringObjectMap2 = JsonUtil.jsonToMap(UrlUtils.sendPost(environmentUrl, String.format(typeOfWorkStatistics, projectPO.getProjectCode())));
-                    if (Integer.parseInt(stringObjectMap2.get("code").toString()) != 200 && checkObject( stringObjectMap2.get("data"))) {
-                        realanameflg = false;
-                    }
-                    Map<String, Object> stringObjectMap3 = JsonUtil.jsonToMap(UrlUtils.sendPost(environmentUrl, String.format(ageDistribution, projectPO.getProjectCode())));
-                    if (Integer.parseInt(stringObjectMap3.get("code").toString()) != 200 && checkObject( stringObjectMap3.get("data"))) {
-                        realanameflg = false;
-                    }
+//                    Map<String, Object> stringObjectMap1 = JsonUtil.jsonToMap(UrlUtils.sendPost(environmentUrl, String.format(todayTeamAttendance, projectPO.getProjectCode())));
+//                    if (Integer.parseInt(stringObjectMap1.get("code").toString()) != 200 && checkObject(stringObjectMap1.get("data"))) {
+//                        realanameflg = false;
+//                    }
+//                    Map<String, Object> stringObjectMap2 = JsonUtil.jsonToMap(UrlUtils.sendPost(environmentUrl, String.format(typeOfWorkStatistics, projectPO.getProjectCode())));
+//                    if (Integer.parseInt(stringObjectMap2.get("code").toString()) != 200 && checkObject( stringObjectMap2.get("data"))) {
+//                        realanameflg = false;
+//                    }
+//                    Map<String, Object> stringObjectMap3 = JsonUtil.jsonToMap(UrlUtils.sendPost(environmentUrl, String.format(ageDistribution, projectPO.getProjectCode())));
+//                    if (Integer.parseInt(stringObjectMap3.get("code").toString()) != 200 && checkObject( stringObjectMap3.get("data"))) {
+//                        realanameflg = false;
+//                    }
                     if (realanameflg) {
                         infoPo.setRealNameSurveillanceInfo("正常");
                     } else {
-                        sb.append(","+"实名制接口异常");
+                        sb.append("实名制接口异常");
                         infoPo.setRealNameSurveillanceInfo("异常");
                     }
                     infoPo.setCause(sb.toString());
